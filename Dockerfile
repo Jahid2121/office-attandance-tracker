@@ -17,4 +17,4 @@ ENV N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
 
 EXPOSE 10000
 
-CMD ["n8n", "start"]
+CMD ["pm2-runtime", "n8n"]
