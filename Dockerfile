@@ -1,4 +1,18 @@
-FROM n8nio/n8n:latest
+FROM node:18-alpine
+
+# Install dependencies required for node-gyp and pm2
+RUN apk add --update --no-cache \
+    python3 \
+    make \
+    g++ \
+    git \
+    openssh-client
+
+# Install n8n and pm2 globally
+RUN npm install -g n8n pm2
+
+# Create n8n directory and set it as working directory
+WORKDIR /home/node/.n8n
 
 # Copy workflow
 COPY workflow.json /home/node/.n8n/workflows/workflow.json
