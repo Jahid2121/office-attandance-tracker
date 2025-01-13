@@ -1,0 +1,161 @@
+{
+  "name": "office attandance tracker by wifi",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1e5d1eb4-e7a3-4104-b614-0fce945d3fb3",
+              "leftValue": "{{$json[\"wifi_ssid\"]}}",
+              "rightValue": "Nexstack",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        620,
+        -80
+      ],
+      "id": "d9e9d402-692f-476a-8d18-21b4aed5f272",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "outputFieldName": "= {{$now}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        540,
+        320
+      ],
+      "id": "40b5e120-5089-4a55-a4e2-c6d9869fbe16",
+      "name": "Date & Time",
+      "alwaysOutputData": true,
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1eBeryV_naLZ9JsRLKdPvnhO7-7GjZRd7CgtBv1laGNo/edit?pli=1&gid=1568280650#gid=1568280650",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1568280650,
+          "mode": "list",
+          "cachedResultName": "January",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eBeryV_naLZ9JsRLKdPvnhO7-7GjZRd7CgtBv1laGNo/edit#gid=1568280650"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        780,
+        320
+      ],
+      "id": "a3cba600-dd9e-4956-83c2-d0268827be43",
+      "name": "Google Sheets",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "5Yskdu1GhHT5xojD",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        60,
+        320
+      ],
+      "id": "68e0e32c-d588-4a54-8b1e-113d7313e175",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "attendance-update",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        280,
+        320
+      ],
+      "id": "50ef8da6-08cf-4a20-b581-d71ad6cbbb79",
+      "name": "Webhook",
+      "webhookId": "a5c728ea-4539-475a-921d-f35dbef4ec44"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "If": {
+      "main": [
+        []
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Date & Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Dhaka",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "9f3a9f97-6213-40cd-8c12-6ac434fd6202",
+  "meta": {
+    "instanceId": "0ad85903e7a8787acdaaac8e3fa3f9da3308a6126f7e0fe421ddaa35a1f6f82d"
+  },
+  "id": "hUPEbWM9GD1WFuSe",
+  "tags": []
+}
